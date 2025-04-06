@@ -1,7 +1,9 @@
 package com.teammanager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "matches")
 @EntityListeners(AuditingEntityListener.class)
@@ -27,33 +30,36 @@ public class Match {
     @JoinColumn(name = "away_team_id", nullable = false)
     private Team awayTeam;
 
-    private LocalDateTime matchDate;
-    
+    @NotNull
+    private LocalDateTime matchDateTime;
+
     private String venue;
-    
+
     private String competition;
-    
+
     private String season;
-    
-    private Integer homeScore;
-    
-    private Integer awayScore;
-    
-    private String status; // SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED, POSTPONED
-    
-    private String referee;
-    
-    private Integer attendance;
-    
-    private String weather;
-    
-    private String pitchCondition;
-    
+
+    @Enumerated(EnumType.STRING)
+    private MatchStatus status = MatchStatus.SCHEDULED;
+
+    private Integer homeTeamScore;
+
+    private Integer awayTeamScore;
+
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     private Set<PlayerStatistics> playerStatistics = new HashSet<>();
 
-    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
-    private Set<MatchEvent> events = new HashSet<>();
+    @Column(columnDefinition = "TEXT")
+    private String matchReport;
+
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
+    private String referee;
+
+    private Integer attendance;
+
+    private String weatherConditions;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

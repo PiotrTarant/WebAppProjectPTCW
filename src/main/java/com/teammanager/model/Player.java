@@ -1,7 +1,11 @@
 package com.teammanager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "players")
 @EntityListeners(AuditingEntityListener.class)
@@ -20,34 +25,33 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Size(max = 50)
     private String firstName;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Size(max = 50)
     private String lastName;
 
-    private String jerseyNumber;
-    
-    private String position;
-    
+    @NotNull
     private LocalDate dateOfBirth;
-    
+
+    @Size(max = 100)
     private String nationality;
-    
-    private Double height;
-    
-    private Double weight;
-    
-    private String preferredFoot;
-    
-    private LocalDate contractStartDate;
-    
-    private LocalDate contractEndDate;
-    
-    private Double salary;
-    
-    private String status; // ACTIVE, INJURED, SUSPENDED, etc.
-    
+
+    @Size(max = 20)
+    private String jerseyNumber;
+
+    @Size(max = 50)
+    private String position;
+
+    private Double height; // in centimeters
+
+    private Double weight; // in kilograms
+
+    @Size(max = 500)
+    private String biography;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
@@ -58,11 +62,17 @@ public class Player {
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private Set<Absence> absences = new HashSet<>();
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
-    private Set<TrainingAttendance> trainingAttendances = new HashSet<>();
+    @ManyToMany(mappedBy = "players")
+    private Set<Training> trainings = new HashSet<>();
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
-    private Set<ScoutingReport> scoutingReports = new HashSet<>();
+    private String photoUrl;
+
+    @Enumerated(EnumType.STRING)
+    private PlayerStatus status = PlayerStatus.ACTIVE;
+
+    private LocalDate contractStartDate;
+
+    private LocalDate contractEndDate;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

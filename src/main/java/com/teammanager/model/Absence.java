@@ -1,15 +1,18 @@
 package com.teammanager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "absences")
 @EntityListeners(AuditingEntityListener.class)
@@ -22,29 +25,31 @@ public class Absence {
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
-    private LocalDate startDate;
-    
-    private LocalDate endDate;
-    
-    private String type; // INJURY, ILLNESS, PERSONAL, SUSPENSION, etc.
-    
-    private String status; // PENDING, APPROVED, REJECTED
-    
+    @NotNull
+    private LocalDateTime startDate;
+
+    @NotNull
+    private LocalDateTime endDate;
+
+    @Enumerated(EnumType.STRING)
+    private AbsenceType type;
+
+    @Size(max = 500)
     private String reason;
-    
-    private String medicalNotes;
-    
-    private String recoveryPlan;
-    
-    private LocalDate expectedReturnDate;
-    
+
+    @Enumerated(EnumType.STRING)
+    private AbsenceStatus status = AbsenceStatus.PENDING;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approved_by_id")
+    @JoinColumn(name = "approved_by")
     private User approvedBy;
-    
-    private LocalDateTime approvalDate;
-    
-    private String approvalNotes;
+
+    private LocalDateTime approvedAt;
+
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
+    private String documentationUrl;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
