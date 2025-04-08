@@ -1,15 +1,20 @@
 package com.teammanager.service;
 
-import com.teammanager.exception.ResourceNotFoundException;
+import com.teammanager.dto.PlayerPrivateDTO;
+import com.teammanager.dto.PlayerPublicDTO;
 import com.teammanager.model.Player;
 import com.teammanager.model.PlayerStatus;
 import com.teammanager.model.Team;
+import com.teammanager.model.UserRole;
 import com.teammanager.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,14 +23,78 @@ public class PlayerService {
     private final TeamService teamService;
 
     @Transactional(readOnly = true)
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
+    public List<PlayerPublicDTO> getAllPlayers() {
+        List<Player> players = playerRepository.findAll();
+        return players.stream()
+                .map(this::convertToPublicDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Object getPlayerDTOById(Long id) {
+        Player player = getPlayerById(id);
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
+        
+        if (hasAccessToPrivateInfo(role)) {
+            return convertToPrivateDTO(player);
+        } else {
+            return convertToPublicDTO(player);
+        }
     }
 
     @Transactional(readOnly = true)
     public Player getPlayerById(Long id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Player", "id", id));
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+    }
+
+    private boolean hasAccessToPrivateInfo(String role) {
+        return role.equals(UserRole.ADMIN.name()) ||
+               role.equals(UserRole.TEAM_OWNER.name()) ||
+               role.equals(UserRole.GENERAL_MANAGER.name());
+    }
+
+    private PlayerPublicDTO convertToPublicDTO(Player player) {
+        PlayerPublicDTO dto = new PlayerPublicDTO();
+        dto.setId(player.getId());
+        dto.setFirstName(player.getFirstName());
+        dto.setLastName(player.getLastName());
+        dto.setJerseyNumber(player.getJerseyNumber());
+        dto.setPosition(player.getPosition());
+        dto.setDateOfBirth(player.getDateOfBirth());
+        dto.setNationality(player.getNationality());
+        dto.setHeight(player.getHeight());
+        dto.setWeight(player.getWeight());
+        dto.setStatus(player.getStatus().name());
+        if (player.getTeam() != null) {
+            dto.setTeamId(player.getTeam().getId());
+        }
+        return dto;
+    }
+
+    private PlayerPrivateDTO convertToPrivateDTO(Player player) {
+        PlayerPrivateDTO dto = new PlayerPrivateDTO();
+        PlayerPublicDTO publicDTO = convertToPublicDTO(player);
+        dto.setId(publicDTO.getId());
+        dto.setFirstName(publicDTO.getFirstName());
+        dto.setLastName(publicDTO.getLastName());
+        dto.setJerseyNumber(publicDTO.getJerseyNumber());
+        dto.setPosition(publicDTO.getPosition());
+        dto.setDateOfBirth(publicDTO.getDateOfBirth());
+        dto.setNationality(publicDTO.getNationality());
+        dto.setHeight(publicDTO.getHeight());
+        dto.setWeight(publicDTO.getWeight());
+        dto.setStatus(publicDTO.getStatus());
+        dto.setTeamId(publicDTO.getTeamId());
+        
+        dto.setContractStartDate(player.getContractStartDate());
+        dto.setContractEndDate(player.getContractEndDate());
+        dto.setContractValue(player.getContractValue());
+        dto.setContractFee(player.getContractFee());
+        
+        return dto;
     }
 
     @Transactional(readOnly = true)

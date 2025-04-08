@@ -1,6 +1,7 @@
 package com.teammanager.controller;
 
 import com.teammanager.dto.PlayerDto;
+import com.teammanager.dto.PlayerPublicDTO;
 import com.teammanager.mapper.PlayerMapper;
 import com.teammanager.model.Player;
 import com.teammanager.model.PlayerStatus;
@@ -24,17 +25,15 @@ public class PlayerController {
     private final PlayerMapper playerMapper;
 
     @GetMapping
-    public ResponseEntity<List<PlayerDto>> getAllPlayers() {
-        List<PlayerDto> players = playerService.getAllPlayers().stream()
-                .map(playerMapper::toDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<PlayerPublicDTO>> getAllPlayers() {
+        List<PlayerPublicDTO> players = playerService.getAllPlayers();
         return ResponseEntity.ok(players);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlayerDto> getPlayerById(@PathVariable Long id) {
-        Player player = playerService.getPlayerById(id);
-        return ResponseEntity.ok(playerMapper.toDto(player));
+    public ResponseEntity<Object> getPlayerById(@PathVariable Long id) {
+        Object player = playerService.getPlayerDTOById(id);
+        return ResponseEntity.ok(player);
     }
 
     @GetMapping("/team/{teamId}")

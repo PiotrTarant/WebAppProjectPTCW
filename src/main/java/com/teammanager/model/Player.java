@@ -74,6 +74,11 @@ public class Player {
 
     private LocalDate contractEndDate;
 
+    @Column(nullable = false)
+    private Double contractValue; // Monthly salary
+
+    private Double contractFee; // Signing/transfer fee
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

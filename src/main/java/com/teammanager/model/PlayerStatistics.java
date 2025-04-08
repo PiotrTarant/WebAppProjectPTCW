@@ -2,7 +2,6 @@ package com.teammanager.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "player_statistics")
 @EntityListeners(AuditingEntityListener.class)
@@ -27,24 +25,53 @@ public class PlayerStatistics {
     @JoinColumn(name = "match_id")
     private Match match;
 
-    private Integer minutesPlayed;
-    private Integer goals;
-    private Integer assists;
-    private Integer yellowCards;
-    private Integer redCards;
-    private Integer shotsTotal;
-    private Integer shotsOnTarget;
-    private Integer passes;
-    private Double passAccuracy;
-    private Integer tackles;
-    private Integer interceptions;
-    private Integer foulsCommitted;
-    private Integer foulsReceived;
-    private Integer saves; // for goalkeepers
-    private Integer goalsAgainst; // for goalkeepers
-    private Integer cleanSheets; // for goalkeepers
+    // Games played and started
+    private Integer gamesPlayed;
+    private Integer gamesStarted;
 
-    @Column(columnDefinition = "TEXT")
+    // Points
+    private Integer points;
+
+    // Field Goals
+    private Integer fieldGoalsMade;
+    private Integer fieldGoalsAttempted;
+    private Double fieldGoalPercentage;
+
+    // Free Throws
+    private Integer freeThrowsMade;
+    private Integer freeThrowsAttempted;
+    private Double freeThrowPercentage;
+
+    // Three-Point Field Goals
+    private Integer threePointFieldGoalsMade;
+    private Integer threePointFieldGoalsAttempted;
+    private Double threePointFieldGoalPercentage;
+
+    // Rebounds
+    private Integer totalRebounds;
+    private Integer offensiveRebounds;
+    private Integer defensiveRebounds;
+
+    // Other Basic Stats
+    private Integer assists;
+    private Integer steals;
+    private Integer turnovers;
+    private Integer blocks;
+    private Integer personalFouls;
+    private Integer technicalFouls;
+    private Integer flagrantFouls;
+    private Integer plusMinus;
+
+    // Advanced Stats
+    private Double efficiency;
+    private Double trueShootingPercentage;
+    private Double usageRate;
+    private Double playerEfficiencyRating;
+    private Double winShares;
+    private Double boxPlusMinus;
+    private Double valueOverReplacementPlayer;
+
+    // Notes
     private String notes;
 
     @CreatedDate

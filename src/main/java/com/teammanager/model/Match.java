@@ -49,6 +49,9 @@ public class Match {
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
     private Set<PlayerStatistics> playerStatistics = new HashSet<>();
 
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    private Set<MatchEvent> events = new HashSet<>();
+
     @Column(columnDefinition = "TEXT")
     private String matchReport;
 
@@ -58,8 +61,6 @@ public class Match {
     private String referee;
 
     private Integer attendance;
-
-    private String weatherConditions;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
