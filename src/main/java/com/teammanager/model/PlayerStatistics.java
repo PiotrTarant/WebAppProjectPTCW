@@ -2,6 +2,7 @@ package com.teammanager.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "player_statistics")
 @EntityListeners(AuditingEntityListener.class)
@@ -26,36 +28,23 @@ public class PlayerStatistics {
     private Match match;
 
     private Integer minutesPlayed;
-    
-    // Offensive statistics
     private Integer goals;
     private Integer assists;
-    private Integer shots;
+    private Integer yellowCards;
+    private Integer redCards;
+    private Integer shotsTotal;
     private Integer shotsOnTarget;
     private Integer passes;
-    private Integer passesCompleted;
-    private Integer crosses;
-    private Integer crossesCompleted;
-    
-    // Defensive statistics
+    private Double passAccuracy;
     private Integer tackles;
-    private Integer tacklesWon;
     private Integer interceptions;
-    private Integer clearances;
-    private Integer blocks;
-    private Integer fouls;
-    private Integer foulsSuffered;
-    
-    // Physical statistics
-    private Double distanceCovered;
-    private Integer sprints;
-    private Integer duels;
-    private Integer duelsWon;
-    
-    // Rating
-    private Double rating;
-    
-    // Notes
+    private Integer foulsCommitted;
+    private Integer foulsReceived;
+    private Integer saves; // for goalkeepers
+    private Integer goalsAgainst; // for goalkeepers
+    private Integer cleanSheets; // for goalkeepers
+
+    @Column(columnDefinition = "TEXT")
     private String notes;
 
     @CreatedDate

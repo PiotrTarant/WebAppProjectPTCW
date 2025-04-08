@@ -2,6 +2,7 @@ package com.teammanager.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "training_attendances")
 @EntityListeners(AuditingEntityListener.class)
@@ -25,19 +27,17 @@ public class TrainingAttendance {
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
-    private String status; // PRESENT, ABSENT, LATE, EXCUSED
-    
+    @Enumerated(EnumType.STRING)
+    private AttendanceStatus status = AttendanceStatus.PRESENT;
+
     private LocalDateTime arrivalTime;
-    
+
     private LocalDateTime departureTime;
-    
+
+    private Integer performanceRating; // 1-10 scale
+
+    @Column(columnDefinition = "TEXT")
     private String notes;
-    
-    private String performanceRating;
-    
-    private String healthStatus;
-    
-    private String equipmentBrought;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

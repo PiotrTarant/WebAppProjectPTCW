@@ -1,9 +1,15 @@
 package com.teammanager.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -12,6 +18,10 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false, unique = true)
-    private UserRole name;
+    @Column(length = 20, unique = true)
+    private RoleName name;
+
+    public Role(RoleName name) {
+        this.name = name;
+    }
 } 
