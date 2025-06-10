@@ -10,7 +10,6 @@ C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppP
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\controller\TeamController.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\model\TrainingType.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\controller\PlayerController.java
-C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\TeamManagerApplication.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\SportsTeamManagerApplication.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\payload\JwtAuthenticationResponse.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\repository\TeamRepository.java
@@ -29,6 +28,7 @@ C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppP
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\mapper\TeamMapper.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\exception\ResourceNotFoundException.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\payload\SignUpRequest.java
+C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\dto\UserDto.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\security\JwtTokenProvider.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\model\Team.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\model\PlayerStatus.java
@@ -38,7 +38,7 @@ C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppP
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\service\RoleService.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\model\Match.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\model\TrainingAttendance.java
-C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\security\SecurityConfig.java
+C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\mapper\UserMapper.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\repository\PlayerRepository.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\security\CustomUserDetailsService.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\controller\RoleController.java
@@ -51,6 +51,7 @@ C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppP
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\model\Role.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\dto\PlayerPublicDTO.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\repository\AbsenceRepository.java
+C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\dto\ApiResponse.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\dto\LoginRequest.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\controller\UserController.java
 C:\Users\piotr\Desktop\WAP\WebAppProjectPTCW-main\WebAppProjectPTCW-main\WebAppProjectPTCW\src\main\java\com\teammanager\security\JwtAuthenticationFilter.java

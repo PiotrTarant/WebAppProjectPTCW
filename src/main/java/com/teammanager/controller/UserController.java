@@ -3,21 +3,33 @@ package com.teammanager.controller;
 import com.teammanager.dto.UserDto;
 import com.teammanager.mapper.UserMapper;
 import com.teammanager.model.User;
+import com.teammanager.security.UserPrincipal;
 import com.teammanager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        try {
+            User user = userService.getUserById(userPrincipal.getId());
+            return ResponseEntity.ok(userMapper.toDto(user));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")

@@ -19,12 +19,9 @@ public interface PlayerStatisticsRepository extends JpaRepository<PlayerStatisti
     @Query("SELECT ps FROM PlayerStatistics ps WHERE ps.player = ?1 ORDER BY ps.match.matchDateTime DESC")
     List<PlayerStatistics> findPlayerStatisticsByPlayerOrderByMatchDateDesc(Player player);
     
-    @Query("SELECT AVG(ps.goals) FROM PlayerStatistics ps WHERE ps.player = ?1")
+    @Query("SELECT AVG(ps.fieldGoalsMade) FROM PlayerStatistics ps WHERE ps.player = ?1")
     Double findAverageGoalsForPlayer(Player player);
     
     @Query("SELECT AVG(ps.assists) FROM PlayerStatistics ps WHERE ps.player = ?1")
     Double findAverageAssistsForPlayer(Player player);
-    
-    @Query("SELECT AVG(ps.passAccuracy) FROM PlayerStatistics ps WHERE ps.player = ?1")
-    Double findAveragePassAccuracyForPlayer(Player player);
 } 

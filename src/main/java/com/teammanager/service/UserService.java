@@ -6,6 +6,7 @@ import com.teammanager.model.Role;
 import com.teammanager.model.RoleName;
 import com.teammanager.model.Team;
 import com.teammanager.model.User;
+import com.teammanager.model.UserRole;
 import com.teammanager.repository.RoleRepository;
 import com.teammanager.repository.TeamRepository;
 import com.teammanager.repository.UserRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
+        user.setRole(UserRole.FAN);
 
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
@@ -133,7 +136,7 @@ public class UserService {
         User user = getUserById(userId);
         return user.getTeams().stream()
                 .map(Team::getUsers)
-                .flatMap(List::stream)
+                .flatMap(Set::stream)
                 .collect(java.util.stream.Collectors.toList());
     }
 } 

@@ -30,23 +30,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   @NonNull HttpServletResponse response,
                                   @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
+            String requestURI = request.getRequestURI();
+            log.debug("Processing request: {} {}", request.getMethod(), requestURI);
+            
+            // Skip authentication for registration and login endpoints
+            if (requestURI.endsWith("/auth/register") || requestURI.endsWith("/auth/login") || requestURI.endsWith("/auth/test")) {
+                log.debug("Skipping authentication for public endpoint: {}", requestURI);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             String jwt = getJwtFromRequest(request);
+            log.debug("JWT token from request: {}", jwt != null ? "present" : "null");
 
-            if (StringUtils.hasText(jwt)) {
-                if (jwtTokenProvider.validateToken(jwt)) {
-                    String username = jwtTokenProvider.getUsernameFromJWT(jwt);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                String username = jwtTokenProvider.getUsernameFromJWT(jwt);
+                log.debug("Valid JWT token for user: {}", username);
 
-                    UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                if (userDetails instanceof UserPrincipal) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.debug("Successfully authenticated user: {}", username);
+                    log.debug("Authentication set in SecurityContext for user: {}", username);
                 } else {
-                    log.warn("Invalid JWT token");
+                    log.error("UserDetails is not an instance of UserPrincipal");
                     SecurityContextHolder.clearContext();
                 }
+            } else {
+                log.debug("No valid JWT token found in request");
+                SecurityContextHolder.clearContext();
             }
         } catch (Exception ex) {
             log.error("Could not set user authentication in security context", ex);

@@ -61,6 +61,12 @@ public class Team {
     @OneToMany(mappedBy = "awayTeam")
     private Set<Match> awayMatches = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "team_users",
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users = new HashSet<>();
+
     private String logoUrl;
 
     private String primaryColor;
