@@ -73,4 +73,52 @@ public class TeamController {
         teamService.deleteTeam(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/players")
+    public ResponseEntity<List<TeamDto>> getTeamPlayers(@PathVariable Long id) {
+        List<TeamDto> players = teamService.getTeamPlayers(id).stream()
+                .map(teamMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(players);
+    }
+
+    @PostMapping("/{id}/players")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COACH')")
+    public ResponseEntity<TeamDto> addPlayerToTeam(
+            @PathVariable Long id,
+            @RequestParam Long playerId) {
+        Team team = teamService.addPlayerToTeam(id, playerId);
+        return ResponseEntity.ok(teamMapper.toDto(team));
+    }
+
+    @DeleteMapping("/{id}/players/{playerId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COACH')")
+    public ResponseEntity<TeamDto> removePlayerFromTeam(
+            @PathVariable Long id,
+            @PathVariable Long playerId) {
+        Team team = teamService.removePlayerFromTeam(id, playerId);
+        return ResponseEntity.ok(teamMapper.toDto(team));
+    }
+
+    @GetMapping("/{id}/statistics")
+    public ResponseEntity<TeamDto> getTeamStatistics(@PathVariable Long id) {
+        Team team = teamService.getTeamStatistics(id);
+        return ResponseEntity.ok(teamMapper.toDto(team));
+    }
+
+    @PutMapping("/{id}/coach")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<TeamDto> assignCoach(
+            @PathVariable Long id,
+            @RequestParam Long coachId) {
+        Team team = teamService.assignCoach(id, coachId);
+        return ResponseEntity.ok(teamMapper.toDto(team));
+    }
+
+    @DeleteMapping("/{id}/coach")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<TeamDto> removeCoach(@PathVariable Long id) {
+        Team team = teamService.removeCoach(id);
+        return ResponseEntity.ok(teamMapper.toDto(team));
+    }
 } 

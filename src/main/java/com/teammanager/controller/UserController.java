@@ -1,30 +1,103 @@
 package com.teammanager.controller;
 
+import com.teammanager.dto.UserDto;
+import com.teammanager.mapper.UserMapper;
 import com.teammanager.model.User;
-import com.teammanager.repository.UserRepository;
-import com.teammanager.security.CurrentUser;
-import com.teammanager.security.UserPrincipal;
+import com.teammanager.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
+    private final UserMapper userMapper;
 
-    private final UserRepository userRepository;
-
-    @GetMapping("/me")
-    @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        return userRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAllUsers().stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{username}")
-    public User getUserProfile(@PathVariable(value = "username") String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(userMapper.toDto(user));
+    }
+
+    @GetMapping("/username/{username}")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(userMapper.toDto(user));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        User updatedUser = userService.updateUser(id, user);
+        return ResponseEntity.ok(userMapper.toDto(updatedUser));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateUserRole(@PathVariable Long id, @RequestParam String roleName) {
+        User updatedUser = userService.updateUserRole(id, roleName);
+        return ResponseEntity.ok(userMapper.toDto(updatedUser));
+    }
+
+    @PostMapping("/{id}/team")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> assignUserToTeam(
+            @PathVariable Long id,
+            @RequestParam Long teamId) {
+        User updatedUser = userService.assignUserToTeam(id, teamId);
+        return ResponseEntity.ok(userMapper.toDto(updatedUser));
+    }
+
+    @DeleteMapping("/{id}/team")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> removeUserFromTeam(
+            @PathVariable Long id,
+            @RequestParam Long teamId) {
+        User updatedUser = userService.removeUserFromTeam(id, teamId);
+        return ResponseEntity.ok(userMapper.toDto(updatedUser));
+    }
+
+    @PutMapping("/{id}/password")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable Long id,
+            @RequestParam String oldPassword,
+            @RequestParam String newPassword) {
+        userService.changePassword(id, oldPassword, newPassword);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/teams")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<List<UserDto>> getUserTeams(@PathVariable Long id) {
+        List<User> teams = userService.getUserTeams(id);
+        return ResponseEntity.ok(teams.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList()));
     }
 } 
